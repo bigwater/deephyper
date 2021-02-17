@@ -30,8 +30,10 @@ class NxSearchSpace:
         with open(path, "w") as f:
             try:
                 nx.nx_agraph.write_dot(self.graph, f)
-            except:
+            except Exception as e:
                 print("Error: can't create graphviz file...")
+                print(e)
+                
 
     def __len__(self):
         """Number of VariableNodes in the current search_space.
@@ -175,7 +177,7 @@ class NxSearchSpace:
                 output_nodes.append(n)
         return output_nodes
 
-    def create_tensor_aux(self, g, n, train=None):
+    def create_tensor_aux(self, g: nx.DiGraph, n, train=None):
         """Recursive function to create the tensors from the graph.
 
         Args:

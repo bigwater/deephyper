@@ -59,6 +59,7 @@ def run(config):
         tf.random.set_seed(seed)
 
     load_config(config)
+    print('config ------------------------------------- hyliu ---------------------------------', config)
 
     input_shape, output_shape = setup_data(config)
 

@@ -2,6 +2,7 @@ import inspect
 from collections import OrderedDict
 from inspect import signature
 from pprint import pformat
+import deephyper.nas.space
 
 import tensorflow as tf
 from deephyper.nas.run.util import setup_data, get_search_space
@@ -356,7 +357,7 @@ class NaProblem(Problem):
         space["seed"] = self.seed
         return space
 
-    def build_search_space(self):
+    def build_search_space(self) -> deephyper.nas.space.AutoKSearchSpace:
         """Build and return a search space object using the infered data shapes after loading data.
 
         Returns:

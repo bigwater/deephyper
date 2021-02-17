@@ -52,7 +52,7 @@ class AutoKSearchSpace(KSearchSpace):
             node.set_op(op=op)
         return node
 
-    def create_model(self):
+    def create_model(self) -> keras.Model:
         """Create the tensors corresponding to the search_space.
 
         Returns:
@@ -65,6 +65,10 @@ class AutoKSearchSpace(KSearchSpace):
 
         output_tensor = self.create_tensor_aux(self.graph, self.output_node)
 
+        # print(output_tensor._inbound_nodes[0])
+
+        # print(output_tensor)
+
         if len(output_tensor.get_shape()) > 2:
             output_tensor = keras.layers.Flatten()(output_tensor)
 
@@ -73,7 +77,13 @@ class AutoKSearchSpace(KSearchSpace):
             kernel_initializer=tf.keras.initializers.glorot_uniform(seed=self.seed))(output_tensor)
 
         input_tensors = [inode._tensor for inode in self.input_nodes]
+        
+        # print('len input_tensors ------- ====== : ', len(input_tensors))
+
+        # print(output_tensor)
 
         self._model = keras.Model(inputs=input_tensors, outputs=output_tensor)
+
+        # self._model.summary()
 
         return keras.Model(inputs=input_tensors, outputs=output_tensor)

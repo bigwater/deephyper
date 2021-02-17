@@ -38,9 +38,8 @@ for i, (k, v) in enumerate(authors.items()):
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    "tensorflow>=2.0.0",
-    "numpy<1.19.0",
-    "dh-scikit-optimize==0.8.2",
+    # "tensorflow==2.3.2",
+    "dh-scikit-optimize>=0.8.3",
     "scikit-learn>=0.23.1",
     "tqdm",
     "keras",

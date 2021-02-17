@@ -114,6 +114,8 @@ def setup_data(config, add_to_config=True):
 
 
 def get_search_space(config, input_shape, output_shape, seed):
+    # print('config in get_search_space -------', config)
+
     create_search_space = config["create_search_space"]["func"]
     cs_kwargs = config["create_search_space"].get("kwargs")
     if cs_kwargs is None:
@@ -127,7 +129,11 @@ def get_search_space(config, input_shape, output_shape, seed):
 
 def setup_search_space(config, input_shape, output_shape, seed):
 
+    # print('config in setup_search_space (before get search space )------- ', config)
+
     search_space = get_search_space(config, input_shape, output_shape, seed)
+
+    # print('config in setup_search_space (after get search space )------- ', config)
 
     arch_seq = config["arch_seq"]
     logger.info(f"actions list: {arch_seq}")

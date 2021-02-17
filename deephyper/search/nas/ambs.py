@@ -82,8 +82,14 @@ class AMBNeuralArchitectureSearch(NeuralArchitectureSearch):
 
         # Building search space for SkOptimizer using ConfigSpace
         search_space = self.problem.build_search_space()
+
+        # print('ambs.py .....................', self.problem)
+
+
         skopt_space = cs.ConfigurationSpace(seed=self.problem.seed)
         for i, vnode in enumerate(search_space.variable_nodes):
+            print(f'vnode{i}.num_ops ==== {vnode.num_ops}')
+
             hp = csh.UniformIntegerHyperparameter(
                 name=f"vnode_{i}", lower=0, upper=(vnode.num_ops - 1)
             )
@@ -221,12 +227,14 @@ class AMBNeuralArchitectureSearch(NeuralArchitectureSearch):
         if n_points > 0:
             points = self.opt.ask(n_points=n_points)
             for point in points:
+                print('(ambs.py get_random_batch)   point ==== ', point)
                 point_as_dict = self.to_dict(point)
                 batch.append(point_as_dict)
         return batch
 
     def to_dict(self, x: list) -> dict:
         cfg = self.problem.space.copy()
+        print('to_dict ambs.py ----', x)
         cfg["arch_seq"] = x
         return cfg
 

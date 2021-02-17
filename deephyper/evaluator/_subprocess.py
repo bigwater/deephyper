@@ -13,6 +13,7 @@ class PopenFuture:
     FAIL_RETURN_VALUE = Evaluator.FAIL_RETURN_VALUE
 
     def __init__(self, args, parse_fxn):
+        print('subprocess calling args ---- ', args)
         self.proc = subprocess.Popen(
             args,
             shell=True,
@@ -126,6 +127,7 @@ class SubprocessEvaluator(Evaluator):
         waitall = bool(return_when.strip() == "ALL_COMPLETED")
 
         num_futures = len(futures)
+        print('num_futures --- _subprocess.py ----- ', num_futures)
         active_futures = [f for f in futures if f.active]
         time_isLeft = self._timer(timeout)
 

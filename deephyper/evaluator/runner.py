@@ -26,12 +26,21 @@ if __name__ == "__main__":
     sys.argv = sys.argv[:1]
     modulePath = argv_cp[1]
     moduleName = argv_cp[2]
+
+    print('module path = ', modulePath)
+    print('module name = ', modulePath)
+
     module = load_module(moduleName, modulePath)
 
     funcName = argv_cp[3]
+    print('func name = ', funcName)
+
     args = argv_cp[4]
+    print('args = ', args)
+
     d = json.loads(args)
     func = getattr(module, funcName)
+    print('func = ', func)
 
     retval = func(d)
     print("DH-OUTPUT:", retval)
