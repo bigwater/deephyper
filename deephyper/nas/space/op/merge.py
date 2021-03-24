@@ -2,7 +2,7 @@ import tensorflow as tf
 
 from deephyper.nas.space.op import Operation
 import deephyper as dh
-
+from deephyper.layers.padding import Padding
 
 class Concatenate(Operation):
     """Concatenate operation.
@@ -143,7 +143,7 @@ class AddByPadding(Operation):
                     rp = p - lp
                     paddings.append([lp, rp])
                 if sum(map(sum, paddings)) != 0:
-                    values[i] = dh.layers.Padding(paddings)(values[i])
+                    values[i] = Padding(paddings)(values[i])
 
         # concatenation
         if len(values) > 1:
