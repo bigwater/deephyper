@@ -1,13 +1,21 @@
 import os
+<<<<<<< HEAD
 # from tensorflow.examples.tutorials.mnist import input_data
+=======
+
+import tensorflow as tf
+>>>>>>> a5800cd7a186196aa159387cd8621a05852c1445
 import numpy as np
 import tensorflow as tf
 import keras
 from keras.datasets import mnist
 
+from tensorflow.keras.utils import to_categorical
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 np.random.seed(2018)
+
 
 def load_data(prop=0.1):
     """Loads the MNIST dataset.
@@ -37,5 +45,6 @@ def load_data(prop=0.1):
     return (x_train, y_train), (x_test, y_test)
 
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     load_data()

@@ -34,33 +34,8 @@ def add_activation_op_(node):
 
 
 
-def create_search_space(input_shape=(10,), output_shape=(1,), **kwargs):
-    struct = AutoKSearchSpace(input_shape, output_shape, regression=False)
-
-    # n1 = VariableNode('N1ConvOp')
-    # add_conv_op_(n1)
-    # struct.connect(struct.input_nodes[0], n1)
-
-    n00 = VariableNode('N8DenseOp')
-    add_dense_op_(n00)
-    struct.connect(struct.input_nodes[0], n00)
-
-    n90 = VariableNode('N9ActivOp')
-    add_activation_op_(n90)
-    struct.connect(n00, n90)
-
-
-    n8 = VariableNode('N8DenseOp')
-    add_dense_op_(n8)
-    struct.connect(n90, n8)
-
-    n9 = VariableNode('N9ActivOp')
-    add_activation_op_(n9)
-    struct.connect(n8, n9)
-
-    return struct
-
-    # return OneLayerFactory()(input_shape, output_shape, **kwargs)
+def create_search_space(input_shape=(728,), output_shape=(10,), **kwargs):
+    return OneLayerFactory()(input_shape, output_shape, regression=False, **kwargs)
 
 
 Problem = NaProblem()
@@ -69,9 +44,7 @@ Problem.load_data(load_data)
 
 Problem.search_space(create_search_space)
 
-Problem.hyperparameters(
-    batch_size=32, learning_rate=0.01, optimizer="adam", num_epochs=10
-)
+Problem.hyperparameters(batch_size=32, learning_rate=0.1, optimizer="adam", num_epochs=10)
 
 Problem.loss("categorical_crossentropy")
 
