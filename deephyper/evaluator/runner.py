@@ -40,7 +40,7 @@ if __name__ == "__main__":
 
     d = json.loads(args)
     func = getattr(module, funcName)
-    print('func = ', func)
+    print('func = ', func, ' ', type(func))
 
     retval = func(d)
     print("DH-OUTPUT:", retval)

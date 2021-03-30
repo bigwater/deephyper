@@ -91,9 +91,12 @@ class AMBNeuralArchitectureSearch(NeuralArchitectureSearch):
             print(f'vnode{i}.num_ops ==== {vnode.num_ops}')
 
             hp = csh.UniformIntegerHyperparameter(
-                name=f"vnode_{i}", lower=0, upper=(vnode.num_ops - 1)
+                name=f"vnode_{i:05d}", lower=0, upper=(vnode.num_ops - 1)
             )
             skopt_space.add_hyperparameter(hp)
+        
+
+        dhlogger.info(f'hyliu --------------------------- {skopt_space}')
 
         self.opt = skopt.Optimizer(
             dimensions=skopt_space,
@@ -157,6 +160,8 @@ class AMBNeuralArchitectureSearch(NeuralArchitectureSearch):
         # Filling available nodes at start
         dhlogger.info(f"Generating {self.evaluator.num_workers} initial points...")
         self.evaluator.add_eval_batch(self.get_random_batch(size=self.n_initial_points))
+        
+        print(self.problem.space)
 
         # Main loop
         while num_evals_done < self.max_evals:

@@ -2,6 +2,7 @@ import numpy as np
 
 from deephyper.core.exceptions.problem import WrongProblemObjective
 from deephyper.search import util
+from deephyper.nas.space.node import ConstantNode, VariableNode
 
 logger = util.conf_logger("deephyper.search.nas.run")
 
@@ -136,9 +137,21 @@ def setup_search_space(config, input_shape, output_shape, seed):
     # print('config in setup_search_space (after get search space )------- ', config)
 
     arch_seq = config["arch_seq"]
-    logger.info(f"actions list: {arch_seq}")
-    search_space.set_ops(arch_seq)
+    
+    opranges = []
+    for n in search_space.nodes:
+        if isinstance(n, VariableNode):
+            opranges.append(n.num_ops)
+    
 
+    opranges2 = []
+    for i, vnode in enumerate(search_space.variable_nodes):
+        opranges2.append(vnode.num_ops)
+    
+    assert(opranges == opranges2)
+
+    logger.info(f"rangelist: {opranges}   actions list: {arch_seq}")
+    search_space.set_ops(arch_seq)
     return search_space
 
 
