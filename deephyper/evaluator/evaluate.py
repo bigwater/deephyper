@@ -146,10 +146,13 @@ class Evaluator:
             from deephyper.evaluator._threadPool import ThreadPoolEvaluator
 
             Eval = ThreadPoolEvaluator(run_function, cache_key=cache_key, **kwargs)
+        
         elif method == "__mpiPool":
             from deephyper.evaluator._mpiWorkerPool import MPIWorkerPool
-
+            print('mpipool')
+            print(kwargs)
             Eval = MPIWorkerPool(run_function, cache_key=cache_key, **kwargs)
+
         elif method == "ray":
             from deephyper.evaluator._ray_evaluator import RayEvaluator
 

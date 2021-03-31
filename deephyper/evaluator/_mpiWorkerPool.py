@@ -111,7 +111,12 @@ class MPIWorkerPool(Evaluator):
             self.comm = MPI.COMM_WORLD
         else:
             self.comm = comm
+        
+        print(type(self.comm))
+        
         self.num_workers = self.comm.Get_size() - 1
+        print('self.num_workers = ', self.num_workers)
+
         self.avail_workers = []
         for tag in range(0, num_ranks_per_node):
             for rank in range(0, self.num_workers):
@@ -119,6 +124,8 @@ class MPIWorkerPool(Evaluator):
         funcName = self._run_function.__name__
         moduleName = self._run_function.__module__
         self.appName = ".".join((moduleName, funcName))
+        print(f'self.appName = {self.appName}')
+    
 
     def _try_posting(self, unposted):
         """This function takes a list of MPIFuture instances that aren't
