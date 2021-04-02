@@ -161,6 +161,8 @@ class AMBNeuralArchitectureSearch(NeuralArchitectureSearch):
         dhlogger.info(f"Generating {self.evaluator.num_workers} initial points...")
         self.evaluator.add_eval_batch(self.get_random_batch(size=self.n_initial_points))
         
+        dhlogger.info(f'max eval = {self.max_evals}')
+
         print(self.problem.space)
 
         # Main loop
@@ -168,6 +170,8 @@ class AMBNeuralArchitectureSearch(NeuralArchitectureSearch):
 
             # Collecting finished evaluations
             new_results = list(self.evaluator.get_finished_evals())
+            
+            print('new_results =============', new_results)
 
             if len(new_results) > 0:
                 stats = {"num_cache_used": self.evaluator.stats["num_cache_used"]}

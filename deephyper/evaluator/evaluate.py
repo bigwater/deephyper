@@ -101,6 +101,8 @@ class Evaluator:
             self._gen_uid = lambda d: self.encode(d)
 
         moduleName = self._run_function.__module__
+        logger.info(f'moduleName == {moduleName} run_function = {self._run_function}')
+
         if moduleName == "__main__":
             raise DeephyperRuntimeError(
                 f'Evaluator will not execute function " {run_function.__name__}" because it is in the __main__ module.  Please provide a function imported from an external module!'
@@ -155,6 +157,7 @@ class Evaluator:
 
         elif method == "ray":
             from deephyper.evaluator._ray_evaluator import RayEvaluator
+            print(kwargs)
 
             Eval = RayEvaluator(
                 run_function,
@@ -201,6 +204,7 @@ class Evaluator:
             self.stats["num_cache_used"] += 1
             logger.info(f"UID: {uid} already evaluated; skipping execution")
         else:
+            # logger.info(f'hyliu ------------- {x}')
             future = self._eval_exec(x)
             logger.info(f"Submitted new eval of {x}")
             future.uid = uid
@@ -289,11 +293,17 @@ class Evaluator:
 
     def get_finished_evals(self, timeout=0.5):
         futures = self.pending_evals.values()
+        print('timeout = ', timeout)
         try:
             waitRes = self.wait(futures, timeout=timeout, return_when="ANY_COMPLETED")
-        except TimeoutError:
-            pass
+        except TimeoutError as e:
+            # logger.info("TimeoutError")
+            print(e)
+
         else:
+            print(f'waitRes.failed {waitRes.failed}')
+            print(f'waitRes.done {waitRes.done}')
+            
             for future in waitRes.done + waitRes.failed:
                 uid = future.uid
                 y = future.result()

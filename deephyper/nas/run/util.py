@@ -150,13 +150,20 @@ def setup_search_space(config, input_shape, output_shape, seed):
     
     assert(opranges == opranges2)
 
-    logger.info(f"rangelist: {opranges}   actions list: {arch_seq}")
+    print(f"rangelist: {opranges}   actions list: {arch_seq}")
+    print('archseq type and element type ====', type(arch_seq), ' ', type(arch_seq[0]))
+
     search_space.set_ops(arch_seq)
     return search_space
 
 
 def compute_objective(objective, history):
     # set a multiplier to turn objective to its negative
+    import socket 
+    print('hyliu history -------------------- ', history, ' ', socket.gethostname())
+    print(objective, type(objective))
+
+
     if type(objective) is str:
         if objective[0] == "-":
             multiplier = -1
@@ -168,12 +175,16 @@ def compute_objective(objective, history):
         split_objective = objective.split("__")
         kind = split_objective[1] if len(split_objective) > 1 else "last"
         mname = split_objective[0]
+        
         if kind == "min":
             res = min(history[mname])
         elif kind == "max":
             res = max(history[mname])
         else:  # 'last' or else, by default it will be the last one
             res = history[mname][-1]
+            print(f' hyliu res last {res} ')
+        
+        
         return multiplier * res
     elif callable(objective):
         func = objective

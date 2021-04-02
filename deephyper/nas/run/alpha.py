@@ -59,8 +59,9 @@ def run(config):
         tf.random.set_seed(seed)
 
     load_config(config)
-    print('config ------------------------------------- hyliu ---------------------------------', config)
-
+    import socket
+    print(f'config  in alpha.py ------------------------------------- hyliu ---------------{socket.gethostname()} ------------------', config)
+    
     input_shape, output_shape = setup_data(config)
 
     search_space = setup_search_space(config, input_shape, output_shape, seed=seed)
@@ -108,6 +109,8 @@ def run(config):
         history = trainer.train(with_pred=with_pred, last_only=last_only)
 
         result = compute_objective(config["objective"], history)
+        
+        print(f'result {result} in alpha.py')
     else:
         # penalising actions if model cannot be created
         result = -1

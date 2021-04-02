@@ -13,6 +13,8 @@ from deephyper.nas import train_utils as U
 logger = util.conf_logger("deephyper.model.trainer")
 
 
+import keras
+
 class TrainerTrainValid:
     def __init__(self, config, model):
         self.cname = self.__class__.__name__
@@ -414,6 +416,14 @@ class TrainerTrainValid:
         Returns:
             dict: a dictionnary corresponding to the training.
         """
+
+        from tensorflow.keras.backend import clear_session
+        clear_session()
+        
+        import socket
+        print(f' ------------------- train -------------------------------------------------------------------------------------  on {socket.gethostname()}')
+        
+
         num_epochs = self.num_epochs if num_epochs is None else num_epochs
 
         self.init_history()
@@ -461,6 +471,8 @@ class TrainerTrainValid:
             self.train_history["training_time"] = time_end_training - time_start_training
 
             self.train_history.update(history.history)
+
+            print('history.history ====== ', history.history)
 
         elif num_epochs < 0:
 

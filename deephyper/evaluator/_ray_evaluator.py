@@ -5,6 +5,7 @@ from collections import defaultdict, namedtuple
 import sys
 
 import ray
+import traceback
 
 from deephyper.evaluator.evaluate import Evaluator
 
@@ -36,7 +37,10 @@ class RayFuture:
             try:
                 self._result = ray.get(id_done[0])
                 self._state = "done"
-            except Exception:
+            except Exception as e:
+                print('hyliu eeexception failed ray in _poll ', e)
+                
+                traceback.print_exc()
                 self._state = "failed"
         else:
             self._state = "active"
@@ -91,7 +95,8 @@ class RayEvaluator(Evaluator):
     ):
         super().__init__(run_function, cache_key, **kwargs)
 
-        logger.info(f"RAY Evaluator init: redis-address={ray_address}")
+        import socket
+        logger.info(f"RAY Evaluator init: redis-address={ray_address}  {socket.gethostname()} ")
 
         if not ray_address is None:
             proc_info = ray.init(address=ray_address, _redis_password=ray_password)
@@ -100,6 +105,9 @@ class RayEvaluator(Evaluator):
 
         self.num_cpus_per_tasks = num_cpus_per_task
         self.num_gpus_per_tasks = num_gpus_per_task
+
+        print('ray.nodes() = ', ray.nodes())
+        print('print(ray.cluster_resources())  = ', ray.cluster_resources()) 
 
         self.num_cpus = int(
             sum([node["Resources"].get("CPU", 0) for node in ray.nodes()])
@@ -110,7 +118,7 @@ class RayEvaluator(Evaluator):
         self.num_workers = self.num_cpus // self.num_cpus_per_tasks
 
         logger.info(
-            f"RAY Evaluator will execute: '{self._run_function}', proc_info: {proc_info}"
+            f"RAY Evaluator will execute: ' {self._run_function.__module__}   {self._run_function}', proc_info: {proc_info}"
         )
 
     def _eval_exec(self, x: dict):
