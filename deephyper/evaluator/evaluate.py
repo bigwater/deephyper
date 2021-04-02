@@ -276,10 +276,10 @@ class Evaluator:
         self.wait(futures.values(), timeout=timeout, return_when="ALL_COMPLETED")
         # TODO: on TimeoutError, kill the evals that did not finish; return infinity
         for uid in futures:
-            y = futures[uid].result()
+            y_dict = futures[uid].result()
             self.elapsed_times[uid] = self._elapsed_sec()
             del self.pending_evals[uid]
-            self.finished_evals[uid] = y
+            self.finished_evals[uid] = y_dict
         for (key, uid) in zip(keys, uids):
             y = self.finished_evals[uid]
             # same printing required in get_finished_evals because of logs parsing
@@ -306,20 +306,24 @@ class Evaluator:
             
             for future in waitRes.done + waitRes.failed:
                 uid = future.uid
-                y = future.result()
+                y_dict = future.result()
+                assert('result' in y_dict)
+                
+                y = y_dict['result']
                 logger.info(f"New eval finished: {uid} --> {y}")
                 self.elapsed_times[uid] = self._elapsed_sec()
                 del self.pending_evals[uid]
-                self.finished_evals[uid] = y
+                
+                self.finished_evals[uid] = y_dict
 
         for key in self.requested_evals[:]:
             uid = self.key_uid_map[key]
             if uid in self.finished_evals:
                 self.requested_evals.remove(key)
                 x = self.decode(key)
-                y = self.finished_evals[uid]
-                logger.info(f"Requested eval x: {x} y: {y}")
-                yield (x, y)
+                y_dict = self.finished_evals[uid]
+                logger.info(f"Requested eval x: {x} y: {y_dict}")
+                yield (x, y_dict)
 
     @property
     def counter(self):
@@ -374,7 +378,11 @@ class Evaluator:
             elif callable(saved_keys):
                 decoded_key = self.decode(key)
                 result = saved_keys(decoded_key)
-            result["objective"] = self.finished_evals[uid]
+            
+            y_dict = self.finished_evals[uid]
+            result["objective"] = y_dict['result']
+            result['node'] = y_dict['node']
+            
             result["elapsed_sec"] = self.elapsed_times[uid]
             resultsList.append(result)
 

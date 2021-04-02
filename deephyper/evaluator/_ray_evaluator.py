@@ -38,8 +38,7 @@ class RayFuture:
                 self._result = ray.get(id_done[0])
                 self._state = "done"
             except Exception as e:
-                print('hyliu eeexception failed ray in _poll ', e)
-                
+                # print('hyliu eeexception failed ray in _poll ', e)
                 traceback.print_exc()
                 self._state = "failed"
         else:
@@ -47,7 +46,11 @@ class RayFuture:
 
     def result(self):
         if not self.done:
-            self._result = self.FAIL_RETURN_VALUE
+            self._result = {
+                'result' : self.FAIL_RETURN_VALUE,
+                'node'   : '---'
+            }
+
         return self._result
 
     def cancel(self):

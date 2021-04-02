@@ -5,6 +5,9 @@ import numpy as np
 import tensorflow as tf
 from deephyper.contrib.callbacks import import_callback
 from deephyper.search import util
+import socket
+
+from typing import Dict, Any
 
 from ..trainer.train_valid import TrainerTrainValid
 from .util import (
@@ -45,7 +48,7 @@ default_callbacks_config = {
 }
 
 
-def run(config):
+def run(config) -> Dict[str, Any]:
     # Threading configuration
     if os.environ.get("OMP_NUM_THREADS", None) is not None:
         logger.debug(f"OMP_NUM_THREADS is {os.environ.get('OMP_NUM_THREADS')}")
@@ -59,7 +62,7 @@ def run(config):
         tf.random.set_seed(seed)
 
     load_config(config)
-    import socket
+    
     print(f'config  in alpha.py ------------------------------------- hyliu ---------------{socket.gethostname()} ------------------', config)
     
     input_shape, output_shape = setup_data(config)
@@ -67,6 +70,11 @@ def run(config):
     search_space = setup_search_space(config, input_shape, output_shape, seed=seed)
 
     model_created = False
+
+    node_of_training = socket.gethostname()
+
+    # logger.info(f'alpha.py run ---- config {config["id"]}')
+
     try:
         model = search_space.create_model()
         model_created = True
@@ -110,10 +118,15 @@ def run(config):
 
         result = compute_objective(config["objective"], history)
         
-        print(f'result {result} in alpha.py')
+        
+        # print(f'result {result} in alpha.py')
     else:
         # penalising actions if model cannot be created
         result = -1
     if result < -10:
         result = -10
-    return result
+    
+    result_dict = {}
+    result_dict['result'] = result
+    result_dict['node']   = node_of_training
+    return result_dict

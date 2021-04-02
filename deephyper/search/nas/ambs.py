@@ -96,7 +96,7 @@ class AMBNeuralArchitectureSearch(NeuralArchitectureSearch):
             skopt_space.add_hyperparameter(hp)
         
 
-        dhlogger.info(f'hyliu --------------------------- {skopt_space}')
+        # dhlogger.info(f'hyliu --------------------------- {skopt_space}')
 
         self.opt = skopt.Optimizer(
             dimensions=skopt_space,
@@ -170,8 +170,6 @@ class AMBNeuralArchitectureSearch(NeuralArchitectureSearch):
 
             # Collecting finished evaluations
             new_results = list(self.evaluator.get_finished_evals())
-            
-            print('new_results =============', new_results)
 
             if len(new_results) > 0:
                 stats = {"num_cache_used": self.evaluator.stats["num_cache_used"]}
@@ -184,9 +182,11 @@ class AMBNeuralArchitectureSearch(NeuralArchitectureSearch):
                 # Transform configurations to list to fit optimizer
                 opt_X = []
                 opt_y = []
-                for cfg, obj in new_results:
+                for cfg, obj_dict in new_results:
                     x = replace_nan(cfg["arch_seq"])
                     opt_X.append(x)
+                    assert('result' in obj_dict)
+                    obj = obj_dict['result']
                     opt_y.append(-obj)  #! maximizing
 
                 self.opt.tell(opt_X, opt_y)  #! fit: costly
@@ -236,14 +236,14 @@ class AMBNeuralArchitectureSearch(NeuralArchitectureSearch):
         if n_points > 0:
             points = self.opt.ask(n_points=n_points)
             for point in points:
-                print('(ambs.py get_random_batch)   point ==== ', point)
+                # print('(ambs.py get_random_batch)   point ==== ', point)
                 point_as_dict = self.to_dict(point)
                 batch.append(point_as_dict)
         return batch
 
     def to_dict(self, x: list) -> dict:
         cfg = self.problem.space.copy()
-        print('to_dict ambs.py ----', x)
+        # print('to_dict ambs.py ----', x)
         cfg["arch_seq"] = x
         return cfg
 
