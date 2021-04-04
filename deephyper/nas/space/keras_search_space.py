@@ -109,6 +109,7 @@ class KSearchSpace(NxSearchSpace):
             raise WrongSequenceToSetOperations(indexes, list(self.variable_nodes))
 
         for op_i, node in zip(indexes, self.variable_nodes):
+            # print(f'{op_i}   {node}')
             node.set_op(op_i)
 
         for node in self.mime_nodes:

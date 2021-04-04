@@ -234,7 +234,9 @@ class Evaluator:
         for line in run_stdout.split("\n"):
             if "DH-OUTPUT:" in line.upper():
                 try:
-                    y = float(line.split()[-1])
+                    y = eval(line.split('DH-OUTPUT:')[-1])
+                    if type(y) is dict:
+                        y = y['result']
                 except ValueError:
                     logger.exception("Could not parse DH-OUTPUT line:\n" + line)
                     y = fail_return_value
@@ -307,9 +309,13 @@ class Evaluator:
             for future in waitRes.done + waitRes.failed:
                 uid = future.uid
                 y_dict = future.result()
-                assert('result' in y_dict)
+
+                if type(y_dict) is dict:
+                    assert('result' in y_dict)
+                    y = y_dict['result']
                 
-                y = y_dict['result']
+                y = y_dict
+
                 logger.info(f"New eval finished: {uid} --> {y}")
                 self.elapsed_times[uid] = self._elapsed_sec()
                 del self.pending_evals[uid]
@@ -380,9 +386,12 @@ class Evaluator:
                 result = saved_keys(decoded_key)
             
             y_dict = self.finished_evals[uid]
-            result["objective"] = y_dict['result']
-            result['node'] = y_dict['node']
-            
+            if type(y_dict) is dict:
+                result["objective"] = y_dict['result']
+                result['node'] = y_dict['node']
+            else:
+                result["objective"] = y_dict
+
             result["elapsed_sec"] = self.elapsed_times[uid]
             resultsList.append(result)
 

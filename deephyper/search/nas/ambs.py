@@ -185,8 +185,13 @@ class AMBNeuralArchitectureSearch(NeuralArchitectureSearch):
                 for cfg, obj_dict in new_results:
                     x = replace_nan(cfg["arch_seq"])
                     opt_X.append(x)
-                    assert('result' in obj_dict)
-                    obj = obj_dict['result']
+                    # assert('result' in obj_dict)
+
+                    if type(obj_dict) is dict:
+                        obj = obj_dict['result']
+                    else:
+                        obj = obj_dict
+                    
                     opt_y.append(-obj)  #! maximizing
 
                 self.opt.tell(opt_X, opt_y)  #! fit: costly
