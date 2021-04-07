@@ -75,6 +75,7 @@ def run(config) -> Dict[str, Any]:
 
     # logger.info(f'alpha.py run ---- config {config["id"]}')
 
+    result_dict = {}
     try:
         model = search_space.create_model()
         model_created = True
@@ -120,7 +121,6 @@ def run(config) -> Dict[str, Any]:
 
         result = compute_objective(config["objective"], history)
         
-        
         # print(f'result {result} in alpha.py')
     else:
         # penalising actions if model cannot be created
@@ -128,7 +128,8 @@ def run(config) -> Dict[str, Any]:
     if result < -10:
         result = -10
     
-    result_dict = {}
+    
     result_dict['result'] = result
     result_dict['node']   = node_of_training
+    result_dict['history'] = history
     return result_dict

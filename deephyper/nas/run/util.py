@@ -159,8 +159,8 @@ def setup_search_space(config, input_shape, output_shape, seed):
 
 def compute_objective(objective, history):
     # set a multiplier to turn objective to its negative
-    # import socket 
-    # print('hyliu history -------------------- ', history, ' ', socket.gethostname())
+    import socket 
+    print('hyliu history -------------------- ', history, ' ', socket.gethostname())
     # print(objective, type(objective))
 
     if type(objective) is str:
@@ -181,8 +181,7 @@ def compute_objective(objective, history):
             res = max(history[mname])
         else:  # 'last' or else, by default it will be the last one
             res = history[mname][-1]
-            print(f' hyliu res last {res} ')
-        
+            # print(f' hyliu res last {res} ')
         
         return multiplier * res
     elif callable(objective):

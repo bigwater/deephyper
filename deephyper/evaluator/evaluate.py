@@ -389,6 +389,15 @@ class Evaluator:
             if type(y_dict) is dict:
                 result["objective"] = y_dict['result']
                 result['node'] = y_dict['node']
+
+                if 'history' in y_dict:
+                    h = y_dict['history']
+                    for kw in h:
+                        if type(h[kw]) is list:
+                            result[kw] = h[kw][-1]
+                        else:
+                            result[kw] = h[kw]
+
             else:
                 result["objective"] = y_dict
 
