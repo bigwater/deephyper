@@ -83,7 +83,9 @@ def run(config) -> Dict[str, Any]:
         logger.info(traceback.format_exc())
 
     if model_created:
+        # print('hyliu ---------------- config -------------', config)
 
+        model_id = '___'.join([str(i) for i in config['arch_seq']])
         # Setup callbacks
         callbacks = []
         cb_requires_valid = False  # Callbacks requires validation data
@@ -97,7 +99,7 @@ def run(config) -> Dict[str, Any]:
                     if cb_name == "ModelCheckpoint":
                         default_callbacks_config[cb_name][
                             "filepath"
-                        ] = f'best_model_{config["id"]}.h5'
+                        ] = f'best_model_{model_id}.h5'
 
                     # Import and create corresponding callback
                     Callback = import_callback(cb_name)
