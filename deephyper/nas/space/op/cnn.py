@@ -29,6 +29,7 @@ class Conv2D(Operation):
         padding="SAME",
         dilation_rate=1,
         activation=None,
+        kernel_regularizer=None
     ):
         self.kernel_size = kernel_size
         self.filters = filters
@@ -37,6 +38,8 @@ class Conv2D(Operation):
         self.dilation_rate = dilation_rate
         self.activation = activation
         self._layer = None
+        self.kernel_regularizer = kernel_regularizer
+
 
     def __str__(self):
         return f"Conv2D_{self.kernel_size}_f{self.filters}"
@@ -60,6 +63,7 @@ class Conv2D(Operation):
                 padding=self.padding,
                 dilation_rate=self.dilation_rate,
                 activation=self.activation,
+                kernel_regularizer=self.kernel_regularizer
             )
         out = self._layer(inputs[0])
         return out
