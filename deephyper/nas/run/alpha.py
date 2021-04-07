@@ -120,6 +120,7 @@ def run(config) -> Dict[str, Any]:
         history = trainer.train(with_pred=with_pred, last_only=last_only)
 
         result = compute_objective(config["objective"], history)
+        result_dict['history'] = history
         
         # print(f'result {result} in alpha.py')
     else:
@@ -131,5 +132,5 @@ def run(config) -> Dict[str, Any]:
     
     result_dict['result'] = result
     result_dict['node']   = node_of_training
-    result_dict['history'] = history
+    
     return result_dict
