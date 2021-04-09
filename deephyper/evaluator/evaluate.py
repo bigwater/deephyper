@@ -403,9 +403,18 @@ class Evaluator:
 
             result["elapsed_sec"] = self.elapsed_times[uid]
             resultsList.append(result)
+        
+        max_n_keys = 0
+        max_keys = None
+        for line in resultsList:
+            if len(line.keys()) > max_n_keys:
+                max_n_keys = len(line.keys())
+                max_keys = line.keys()
+
 
         with open("results.csv", "w") as fp:
-            columns = resultsList[0].keys()
+            # columns = resultsList[0].keys()
+            columns = max_keys
             writer = csv.DictWriter(fp, columns)
             writer.writeheader()
             writer.writerows(resultsList)
