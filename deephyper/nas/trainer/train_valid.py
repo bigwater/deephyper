@@ -428,6 +428,8 @@ class TrainerTrainValid:
 
         self.init_history()
 
+        print('where am I? in train_valid.py ', os.getcwd())
+
         if num_epochs > 0:
 
             time_start_training = time.time()  # TIMING

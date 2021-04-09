@@ -157,7 +157,9 @@ class Evaluator:
 
         elif method == "ray":
             from deephyper.evaluator._ray_evaluator import RayEvaluator
-            print(kwargs)
+            print('method == ray', kwargs)
+
+            kwargs['cwd'] = os.getcwd()
 
             Eval = RayEvaluator(
                 run_function,
@@ -410,8 +412,8 @@ class Evaluator:
             if len(line.keys()) > max_n_keys:
                 max_n_keys = len(line.keys())
                 max_keys = line.keys()
-
-
+        
+        print('where am I? in evaluate.py ', os.getcwd())
         with open("results.csv", "w") as fp:
             # columns = resultsList[0].keys()
             columns = max_keys

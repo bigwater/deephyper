@@ -61,6 +61,9 @@ def run(config) -> Dict[str, Any]:
         np.random.seed(seed)
         tf.random.set_seed(seed)
 
+    print('cwd in run (alpha.py) --- ', config['cwd'])
+    os.chdir(config['cwd'])
+
     load_config(config)
     
     print(f'config  in alpha.py ------------------------------------- hyliu ---------------{socket.gethostname()} ------------------', config)
@@ -117,6 +120,7 @@ def run(config) -> Dict[str, Any]:
         last_only, with_pred = preproc_trainer(config)
         last_only = last_only and not cb_requires_valid
 
+        print('where am I? in alpha.py ', os.getcwd())
         history = trainer.train(with_pred=with_pred, last_only=last_only)
 
         result = compute_objective(config["objective"], history)

@@ -12,6 +12,7 @@ JSON-formatted dictionary escaped by single quotes.
 import importlib
 import sys
 import json
+import os
 
 def load_module(name, path):
     try:
@@ -37,7 +38,8 @@ if __name__ == "__main__":
 
     args = argv_cp[4]
     print('args = ', args)
-
+    print('where am I? runner.py', os.getcwd())
+    
     d = json.loads(args)
     func = getattr(module, funcName)
     print('func = ', func, ' ', type(func))
