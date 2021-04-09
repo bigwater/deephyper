@@ -84,7 +84,9 @@ def run(config) -> Dict[str, Any]:
         model_created = True
     except:
         logger.info("Error: Model creation failed...")
-        logger.info(traceback.format_exc())
+        logger.error(traceback.format_exc())
+        print(f'Error: Model creation failed... {traceback.format_exc()}')
+
 
     if model_created:
         # print('hyliu ---------------- config -------------', config)

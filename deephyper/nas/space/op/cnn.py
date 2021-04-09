@@ -199,3 +199,37 @@ class AvgPool2D(Operation):
             )
         out = self._layer(inputs[0])
         return out
+
+
+
+
+
+class BatchNormalization(Operation):
+    def __init__(self, axis=-1, momentum=0.99, epsilon=0.001, **kwargs):
+        self._layer = None
+        self._axis = axis
+        self._momentum = momentum
+        self._epsilon = epsilon
+        self._kwargs = kwargs
+
+
+    def __str__(self):
+        return f"BatchNormalization"
+
+    def __call__(self, inputs, **kwargs):
+        """Create the tensorflow operation.
+
+        Args:
+            inputs (list(Tensor)): list of input tensors.
+
+        Return: a tensor corresponding to the operation.
+        """
+        assert (
+            len(inputs) == 1
+        ), f"{type(self).__name__} as {len(inputs)} inputs when 1 is required."
+
+        if self._layer is None:
+            self._layer = tf.keras.layers.BatchNormalization(self._axis, self._momentum, self._epsilon, **self._kwargs)
+        
+        out = self._layer(inputs[0])
+        return out
