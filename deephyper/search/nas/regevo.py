@@ -36,6 +36,8 @@ class RegularizedEvolution(NeuralArchitectureSearch):
 
         self.free_workers = self.evaluator.num_workers
 
+        print('population_size = ', population_size)
+
         dhlogger.info(
             jm(
                 type="start_infos",
@@ -110,7 +112,11 @@ class RegularizedEvolution(NeuralArchitectureSearch):
                     )
 
     def select_parent(self, sample: list) -> list:
-        cfg, _ = max(sample, key=lambda x: x[1])
+        # print('select_parent = type sample', type(sample))
+        # print('select_parent = type sample[0]', type(sample[0]), ' ', sample[0])
+        #  type sample[0] <class 'tuple'>   ({'create_search_space': {'func': 'ckptproject.nas.search_space.cifar10.structures.struct_bn.create_search_space', 'kwargs': {}}, 'hyperparameters': {'verbose': 0, 'batch_size': 128, 'optimizer': 'adam', 'num_epochs': 3}, 'load_data': {'func': 'ckptproject.nas.search_space.cifar10.load_data.load_data', 'kwargs': {}}, 'loss': 'categorical_crossentropy', 'metrics': ['acc'], 'objective': 'val_acc__last', 'seed': 1861154739, 'arch_seq': [10, 0, 5, 0, 0, 9, 1, 12, 1, 2, 10, 1, 6, 0, 3, 13, 1, 3, 3, 1, 4]}, {'history': {'n_parameters': 1860202, 'training_time': 156.77635622024536, 'loss': [0.9116312265396118], 'acc': [0.7707800269126892], 'val_loss': [1.5440634489059448], 'val_acc': [0.6061000227928162]}, 'result': 0.6061000227928162, 'node': 'cc082'})
+
+        cfg, _ = max(sample, key=lambda x: x[1]['result'] )
         return cfg["arch_seq"]
 
     def gen_random_batch(self, size: int) -> list:
