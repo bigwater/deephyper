@@ -31,7 +31,7 @@ class AutoKSearchSpace(KSearchSpace):
     """
 
     def __init__(self, input_shape, output_shape, regression: bool, *args, **kwargs):
-        super().__init__(input_shape, output_shape)
+        super().__init__(input_shape, output_shape, **kwargs)
         self.regression = regression
 
     def set_output_node(self, graph, output_nodes):

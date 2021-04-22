@@ -47,7 +47,7 @@ class KSearchSpace(NxSearchSpace):
 
     def __init__(self, input_shape, output_shape, batch_size=None, *args, **kwargs):
 
-        super().__init__()
+        super().__init__( seed = kwargs.get('seed', None) )
 
         if type(input_shape) is tuple:
             # we have only one input tensor here

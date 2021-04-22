@@ -117,8 +117,11 @@ def setup_data(config, add_to_config=True):
 def get_search_space(config, input_shape, output_shape, seed):
     # print('config in get_search_space -------', config)
 
+    # print('get_search_space seed = ', seed)
+
     create_search_space = config["create_search_space"]["func"]
     cs_kwargs = config["create_search_space"].get("kwargs")
+
     if cs_kwargs is None:
         search_space = create_search_space(input_shape, output_shape, seed=seed)
     else:
